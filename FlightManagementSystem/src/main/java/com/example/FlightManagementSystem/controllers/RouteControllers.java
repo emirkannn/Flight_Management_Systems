@@ -4,8 +4,6 @@ import com.example.FlightManagementSystem.Dto.RouteDto;
 import com.example.FlightManagementSystem.entities.Route;
 import com.example.FlightManagementSystem.response.RouteResponse;
 import com.example.FlightManagementSystem.services.RouteService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -3,7 +3,6 @@ package com.example.FlightManagementSystem.services;
 import com.example.FlightManagementSystem.Dto.AirportDto;
 import com.example.FlightManagementSystem.entities.Airport;
 import com.example.FlightManagementSystem.entities.Flight;
-import com.example.FlightManagementSystem.entities.Route;
 import com.example.FlightManagementSystem.repos.AirportRepository;
 import com.example.FlightManagementSystem.response.FlightResponse;
 import org.springframework.stereotype.Service;
