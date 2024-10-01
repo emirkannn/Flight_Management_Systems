@@ -24,4 +24,7 @@ public class RouteDto {
         this.destinationId = route.getDestination().getId();
         this.distanceInMiles = route.getDistanceInMiles();
     }
+
+    public RouteDto() {
+    }
 }

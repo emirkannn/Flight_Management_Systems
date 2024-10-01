@@ -56,6 +56,7 @@ public class AirportService {
     public Airport saveOneAirport(AirportDto newAirportDto) {
 
         Airport airport = new Airport();
+        airport.setId(newAirportDto.getId());
         airport.setName(newAirportDto.getName());
         airport.setCode(newAirportDto.getCode());
         airport.setCountry(newAirportDto.getCountry());

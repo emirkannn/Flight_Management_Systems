@@ -1,6 +1,7 @@
 package com.example.FlightManagementSystem.Dto;
 
 import com.example.FlightManagementSystem.entities.Flight;
+import com.example.FlightManagementSystem.entities.Route;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,5 +35,8 @@ public class FlightDto {
         this.departureTime = flight.getDepartureTime();
         this.arrivalTime = flight.getArrivalTime();
         this.capacity = flight.getCapacity();
+    }
+
+    public FlightDto() {
     }
 }

@@ -7,6 +7,7 @@ import com.example.FlightManagementSystem.entities.FlightStatusEnum;
 import com.example.FlightManagementSystem.entities.Route;
 import com.example.FlightManagementSystem.repos.AirportRepository;
 import com.example.FlightManagementSystem.repos.FlightRepository;
+import com.example.FlightManagementSystem.repos.RouteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,12 @@ public class FlightService {
 
     private final FlightRepository flightRepository;
     private final AirportRepository airportRepository;
+    private final RouteRepository routeRepository;
 
-    public FlightService(FlightRepository flightRepository, AirportRepository airportRepository) {
+    public FlightService(FlightRepository flightRepository, AirportRepository airportRepository,RouteRepository routeRepository) {
         this.flightRepository = flightRepository;
         this.airportRepository = airportRepository;
+        this.routeRepository =routeRepository;
     }
 
     public List<Flight> getAllFlights() {
@@ -47,6 +50,8 @@ public class FlightService {
             flight.setDepartureTime(flightdto.getDepartureTime());
             flight.setArrivalTime(flightdto.getArrivalTime());
             flight.setPrice(flightdto.getPrice());
+            Route route = routeRepository.findById(flightdto.getRoute_id()).orElse(null);
+            flight.setRoute(route);
             Airport departureAirport = airportRepository.findById(flightdto.getDeparture_airport_id()).orElse(null);
             flight.setDepartureAirport(departureAirport);
             Airport arrivelAirport = airportRepository.findById(flightdto.getArrival_airport_id()).orElse(null);
@@ -65,6 +70,8 @@ public class FlightService {
         flight.setDepartureAirport(departureAirport);
         Airport arrivelAirport = airportRepository.findById(flightDto.getArrival_airport_id()).orElse(null);
         flight.setArrivalAirport(arrivelAirport);
+        Route route = routeRepository.findById(flightDto.getRoute_id()).orElse(null);
+        flight.setRoute(route);
         flight.setPrice(flightDto.getPrice());
         flight.setDepartureTime(flightDto.getDepartureTime());
         flight.setArrivalTime(flightDto.getArrivalTime());
