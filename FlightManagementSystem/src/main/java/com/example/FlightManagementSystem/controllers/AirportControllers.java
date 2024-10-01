@@ -1,10 +1,9 @@
 package com.example.FlightManagementSystem.controllers;
 
 import com.example.FlightManagementSystem.Dto.AirportDto;
+import com.example.FlightManagementSystem.Dto.FlightDto;
 import com.example.FlightManagementSystem.entities.Airport;
 import com.example.FlightManagementSystem.entities.Flight;
-import com.example.FlightManagementSystem.response.AirportResponse;
-import com.example.FlightManagementSystem.response.FlightResponse;
 import com.example.FlightManagementSystem.services.AirportService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +24,8 @@ public class AirportControllers {
         return airportService.getAllAirports();
     }
     @PostMapping
-    public Airport createAirport(@RequestBody Airport airport) {
-        return airportService.saveOneAirport(airport);
+    public Airport createAirport(@RequestBody AirportDto airportDto) {
+        return airportService.saveOneAirport(airportDto);
     }
 
     @PutMapping(value = "/{id}")
@@ -36,20 +35,17 @@ public class AirportControllers {
 
     @DeleteMapping("/{id}")
     public void deleteAirport(@PathVariable Long id) {
-        airportService.deleteOneAirport(id);
+        airportService.deleteAirport(id);
     }
 
     @GetMapping("/{airportId}")
-    public AirportResponse getAirportResponse(@PathVariable Long airportId) {
+    public AirportDto getAirportResponse(@PathVariable Long airportId) {
         Airport airport = airportService.getAirports(airportId);
-        if (airport == null) {
-            return null;
-        }
-        return new AirportResponse(airport);
+        return new AirportDto(airport);
     }
     // Belirli bir havaalanından kalkan uçuşları getirir
     @GetMapping("/{id}/departure-flights")
-    public List<FlightResponse> getDepartureFlights(@PathVariable Long id) {
+    public List<FlightDto> getDepartureFlights(@PathVariable Long id) {
         return airportService.getDepartureFlights(id);
     }
 

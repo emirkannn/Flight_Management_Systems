@@ -51,6 +51,7 @@ public class RouteService {
 
     public Route createOneRoute(RouteDto routeDto) {
         Route route = new Route();
+        route.setId(routeDto.getId());
         route.setDistanceInMiles(routeDto.getDistanceInMiles());
         Airport destination = airportRepository.findById(routeDto.getDestinationId()).orElse(null);
         route.setDestination(destination);

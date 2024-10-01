@@ -2,7 +2,6 @@ package com.example.FlightManagementSystem.controllers;
 
 import com.example.FlightManagementSystem.Dto.RouteDto;
 import com.example.FlightManagementSystem.entities.Route;
-import com.example.FlightManagementSystem.response.RouteResponse;
 import com.example.FlightManagementSystem.services.RouteService;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +23,12 @@ public class RouteControllers {
     }
 
     @GetMapping("/{routeId}")
-    public RouteResponse getRouteResponse(@PathVariable Long routeId) {
+    public RouteDto getRouteResponse(@PathVariable Long routeId) {
         Route route = routeService.getRouteById(routeId);
         if (route == null) {
             return null;
         }
-        return new RouteResponse(route);
+        return new RouteDto(route);
     }
     @DeleteMapping("/{id}")
     public void deleteAirport(@PathVariable Long id) {

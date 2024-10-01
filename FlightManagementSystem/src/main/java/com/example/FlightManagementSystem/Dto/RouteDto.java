@@ -1,5 +1,6 @@
 package com.example.FlightManagementSystem.Dto;
 
+import com.example.FlightManagementSystem.entities.Route;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,10 @@ public class RouteDto {
     @JsonProperty("distance_in_miles")
     private int distanceInMiles;
 
+    public RouteDto(Route route) {
+        this.id = route.getId();
+        this.sourceId = route.getSource().getId();
+        this.destinationId = route.getDestination().getId();
+        this.distanceInMiles = route.getDistanceInMiles();
+    }
 }

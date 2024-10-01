@@ -1,6 +1,5 @@
 package com.example.FlightManagementSystem.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,23 +10,20 @@ import lombok.Data;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Route {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
     @JoinColumn(name = "source_id", nullable = false)
-    @JsonBackReference
-    private Airport source;
+    @JsonIgnoreProperties({"departureFlights", "arrivalFlights"})  // Döngüye girmemesi için ilişkili alanlar ignore edilir
+    private Airport source; // kalkış havalimanı
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "destination_id", nullable = false)
-    @JsonBackReference
-    private Airport destination;
+    @JsonIgnoreProperties({"departureFlights", "arrivalFlights"})  // Döngüye girmemesi için ilişkili alanlar ignore edilir
+    private Airport destination; // iniş havalimanı
 
-    @Column(nullable = false)
+    @Column(name = "distance_in_miles", nullable = false)
     private int distanceInMiles;
-
 }

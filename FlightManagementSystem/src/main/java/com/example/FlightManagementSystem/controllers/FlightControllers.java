@@ -3,7 +3,6 @@ package com.example.FlightManagementSystem.controllers;
 import com.example.FlightManagementSystem.Dto.FlightDto;
 import com.example.FlightManagementSystem.entities.Flight;
 import com.example.FlightManagementSystem.entities.Route;
-import com.example.FlightManagementSystem.response.FlightResponse;
 import com.example.FlightManagementSystem.services.FlightService;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +23,9 @@ public class FlightControllers {
     }
 
     @GetMapping("/{flightId}")
-    public FlightResponse  getFlightResponse(@PathVariable Long flightId) {
+    public FlightDto  getFlightRDto(@PathVariable Long flightId) {
         Flight flight = flightService.getFlightById(flightId);
-        if (flight == null) {
-            return null;
-        }
-        return new FlightResponse(flight);
+        return new FlightDto(flight);
     }
     @GetMapping("/{flightId}/route")
     public Route getFlightRoute(@PathVariable Long flightId) {
@@ -41,7 +37,7 @@ public class FlightControllers {
     }
     @DeleteMapping("/{id}")
     public void deleteFlight(@PathVariable Long id) {
-        flightService.deleteOneAirport(id);
+        flightService.deleteOneFlight(id);
     }
     @PutMapping("/{id}")
     public Flight updateFlight(@PathVariable Long id, @RequestBody FlightDto flightDto) {

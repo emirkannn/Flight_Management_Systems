@@ -1,10 +1,13 @@
 package com.example.FlightManagementSystem.services;
 
 import com.example.FlightManagementSystem.Dto.AirportDto;
+import com.example.FlightManagementSystem.Dto.FlightDto;
 import com.example.FlightManagementSystem.entities.Airport;
 import com.example.FlightManagementSystem.entities.Flight;
 import com.example.FlightManagementSystem.repos.AirportRepository;
-import com.example.FlightManagementSystem.response.FlightResponse;
+import com.example.FlightManagementSystem.repos.FlightRepository;
+import com.example.FlightManagementSystem.repos.RouteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +18,16 @@ import java.util.stream.Collectors;
 public class AirportService {
 
     private final AirportRepository airportRepository;
+    private final  RouteRepository routeRepository;
+    private final  FlightRepository flightRepository;
 
-    public AirportService(AirportRepository airportRepository) {
+
+    public AirportService(AirportRepository airportRepository,
+                          RouteRepository routeRepository,FlightRepository flightRepository ) {
         this.airportRepository = airportRepository;
+        this.flightRepository = flightRepository;
+        this.routeRepository = routeRepository;
+
     }
 
     public List<Airport> getAllAirports() {
@@ -26,11 +36,11 @@ public class AirportService {
     public Airport getAirports(Long id) {
         return airportRepository.findById(id).orElse(null);
     }
-    public List<FlightResponse> getDepartureFlights(Long airportId) {
+    public List<FlightDto> getDepartureFlights(Long airportId) {
         Airport airport = airportRepository.findById(airportId).orElse(null);
         if (airport != null) {
             return airport.getDepartureFlights().stream()
-                    .map(FlightResponse::new)
+                    .map(FlightDto::new)
                     .collect(Collectors.toList()); // Kalkış uçuşlarını döndürür
         }
         return null;
@@ -43,8 +53,14 @@ public class AirportService {
         return null;
     }
 
-    public Airport saveOneAirport(Airport newAirport) {
-        return airportRepository.save(newAirport);
+    public Airport saveOneAirport(AirportDto newAirportDto) {
+
+        Airport airport = new Airport();
+        airport.setName(newAirportDto.getName());
+        airport.setCode(newAirportDto.getCode());
+        airport.setCountry(newAirportDto.getCountry());
+        airport.setCity(newAirportDto.getCity());
+        return airportRepository.save(airport);
     }
 
     public Airport updateByAirport(Long id, AirportDto airportDto) {
@@ -62,7 +78,11 @@ public class AirportService {
         }
     }
 
-    public void deleteOneAirport(Long id) {
-        airportRepository.deleteById(id);
+    @Transactional
+    public void deleteAirport(Long airportId) {
+        routeRepository.deleteBySourceIdOrDestinationId(airportId, airportId); // İlgili rotaları sil
+        flightRepository.deleteByDepartureAirportIdOrArrivalAirportId(airportId, airportId); // İlgili uçuşları sil
+        airportRepository.deleteById(airportId); // Havaalanını sil
     }
+
 }

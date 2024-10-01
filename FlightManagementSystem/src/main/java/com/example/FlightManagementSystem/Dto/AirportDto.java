@@ -1,6 +1,7 @@
 package com.example.FlightManagementSystem.Dto;
 
 
+import com.example.FlightManagementSystem.entities.Airport;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,5 +14,11 @@ public class AirportDto {
     private String country;
     private String city;
 
-
+    public AirportDto(Airport airport) {
+        this.id = airport.getId();
+        this.name = airport.getName();
+        this.code = airport.getCode();
+        this.country = airport.getCountry();
+        this.city = airport.getCity();
+    }
 }

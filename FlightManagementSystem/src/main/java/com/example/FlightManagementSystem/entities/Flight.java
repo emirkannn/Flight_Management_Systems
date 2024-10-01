@@ -26,12 +26,12 @@ public class Flight {
     @JsonBackReference // sonsuz döngüyü önler
     private Route route;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "departure_airport_id", nullable = false)
     @JsonManagedReference("departure-airport")
     private Airport departureAirport;  // Kalkış havaalanı
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "arrival_airport_id", nullable = false)
     @JsonManagedReference("arrival-airport")
     private Airport arrivalAirport;     // Varış havaalanı
@@ -52,12 +52,4 @@ public class Flight {
     @Column(nullable = false)
     private FlightStatusEnum status = FlightStatusEnum.SCHEDULED; // planlanmış
 
-    public void updateStatus(LocalDateTime currentTime) {
-        if (currentTime.isAfter(departureTime) && status == FlightStatusEnum.SCHEDULED) {
-            status = FlightStatusEnum.DEPARTED; // Update status to Departed
-        }
-        if (currentTime.isAfter(arrivalTime) && status == FlightStatusEnum.DEPARTED) { // ayrılmış
-            status = FlightStatusEnum.ARRIVED; // Update status to Arrived
-        }
-    }
 }

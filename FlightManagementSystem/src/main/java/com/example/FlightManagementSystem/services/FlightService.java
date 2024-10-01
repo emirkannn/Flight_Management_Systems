@@ -7,6 +7,7 @@ import com.example.FlightManagementSystem.entities.FlightStatusEnum;
 import com.example.FlightManagementSystem.entities.Route;
 import com.example.FlightManagementSystem.repos.AirportRepository;
 import com.example.FlightManagementSystem.repos.FlightRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,10 +30,6 @@ public class FlightService {
     public Flight getFlightById(Long id) {
         return flightRepository.findById(id).orElse(null);
     }
-
-    public void deleteOneAirport(Long id) {
-        flightRepository.deleteById(id);
-    }
     public Route getFlightRoute(Long flightId) {
        Flight flight = flightRepository.findById(flightId).orElse(null);
         if (flight != null) {
@@ -50,6 +47,10 @@ public class FlightService {
             flight.setDepartureTime(flightdto.getDepartureTime());
             flight.setArrivalTime(flightdto.getArrivalTime());
             flight.setPrice(flightdto.getPrice());
+            Airport departureAirport = airportRepository.findById(flightdto.getDeparture_airport_id()).orElse(null);
+            flight.setDepartureAirport(departureAirport);
+            Airport arrivelAirport = airportRepository.findById(flightdto.getArrival_airport_id()).orElse(null);
+            flight.setArrivalAirport(arrivelAirport);
             flightRepository.save(flight);
             return flight;
         }else {
@@ -70,5 +71,14 @@ public class FlightService {
         flight.setCapacity(flightDto.getCapacity());
         flight.setStatus(FlightStatusEnum.SCHEDULED);
         return flightRepository.save(flight);
+    }
+
+    public void deleteOneFlight(Long id) {
+        Optional<Flight> flight = flightRepository.findById(id);
+        if (flight.isPresent()) {
+            flightRepository.deleteById(id);
+        }else {
+            throw new EntityNotFoundException("Flight not found with id: " + id);
+        }
     }
 }

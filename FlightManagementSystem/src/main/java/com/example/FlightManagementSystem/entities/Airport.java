@@ -29,12 +29,12 @@ public class Airport {
     @Column(nullable = false)
     private String city;
 
-    @OneToMany(mappedBy = "departureAirport",cascade = CascadeType.ALL, fetch = FetchType.LAZY) // kalkışlar
+    @OneToMany(mappedBy = "departureAirport",cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY) // kalkışlar
     @JsonBackReference("departure-airport") // döngüyü önler
     private List<Flight> departureFlights;
 
-    @JsonBackReference("arrivel-airport")
-    @OneToMany(mappedBy = "arrivalAirport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)// inişler
+    @JsonBackReference("arrival-airport")
+    @OneToMany(mappedBy = "arrivalAirport", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)// inişler
     private List<Flight> arrivalFlights;
 
 
