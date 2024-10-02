@@ -1,42 +1,38 @@
 package com.example.FlightManagementSystem.Dto;
 
 import com.example.FlightManagementSystem.entities.Flight;
-import com.example.FlightManagementSystem.entities.Route;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.FlightManagementSystem.entities.FlightStatusEnum;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
 public class FlightDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String flightNumber;
-    private Long route_id;
-    private Long departure_airport_id;  // Kalkış havaalanı
-    private Long arrival_airport_id;     // Varış havaalanı
+    private RouteDto route;  // Route DTO
+    private AirportDto departureAirport;  // Kalkış Havaalanı DTO
+    private AirportDto arrivalAirport;    // Varış Havaalanı DTO
     private int price;
-    private LocalDateTime departureTime; // kalkış saati
-    private LocalDateTime arrivalTime; // varış saati
+    private LocalDateTime departureTime;  // kalkış saati
+    private LocalDateTime arrivalTime;    // varış saati
     private int capacity;
+    private FlightStatusEnum status;      // Uçuş durumu
 
     public FlightDto(Flight flight) {
         this.id = flight.getId();
         this.flightNumber = flight.getFlightNumber();
-        this.route_id = flight.getRoute().getId();
-        this.departure_airport_id = flight.getDepartureAirport().getId() ;
-        this.arrival_airport_id = flight.getArrivalAirport().getId() ;
+        this.route = new RouteDto(flight.getRoute());  // Route DTO dönüşümü
+        this.departureAirport = new AirportDto(flight.getDepartureAirport()); // Kalkış havaalanı DTO dönüşümü
+        this.arrivalAirport = new AirportDto(flight.getArrivalAirport());     // Varış havaalanı DTO dönüşümü
         this.price = flight.getPrice();
         this.departureTime = flight.getDepartureTime();
         this.arrivalTime = flight.getArrivalTime();
         this.capacity = flight.getCapacity();
-    }
-
-    public FlightDto() {
+        this.status = flight.getStatus();
     }
 }

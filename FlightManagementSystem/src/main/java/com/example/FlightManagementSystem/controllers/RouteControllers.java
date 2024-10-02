@@ -1,7 +1,6 @@
 package com.example.FlightManagementSystem.controllers;
 
 import com.example.FlightManagementSystem.Dto.RouteDto;
-import com.example.FlightManagementSystem.entities.Route;
 import com.example.FlightManagementSystem.services.RouteService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,28 +17,24 @@ public class RouteControllers {
     }
 
     @GetMapping
-    public List<Route> getAllRoutes() {
+    public List<RouteDto> getAllRoutes() {
         return routeService.getAllRoutes();
     }
 
     @GetMapping("/{routeId}")
     public RouteDto getRouteResponse(@PathVariable Long routeId) {
-        Route route = routeService.getRouteById(routeId);
-        if (route == null) {
-            return null;
-        }
-        return new RouteDto(route);
+        return routeService.getRouteById(routeId);
     }
     @DeleteMapping("/{id}")
     public void deleteAirport(@PathVariable Long id) {
         routeService.deleteOneAirport(id);
     }
     @PutMapping("{id}")
-    public Route updateRoute(@PathVariable Long id, @RequestBody RouteDto routeDTO) {
+    public RouteDto updateRoute(@PathVariable Long id, @RequestBody RouteDto routeDTO) {
         return routeService.updateByRoute(id,routeDTO);
     }
     @PostMapping()
-    public Route createRoute(@RequestBody RouteDto routeDto) {
+    public RouteDto createRoute(@RequestBody RouteDto routeDto) {
         return routeService.createOneRoute(routeDto);
 
     }

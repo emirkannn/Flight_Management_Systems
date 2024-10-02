@@ -20,16 +20,16 @@ public class AirportControllers {
         this.airportService = airportService;
     }
     @GetMapping
-    public List<Airport> getAllAirports() {
+    public List<AirportDto> getAllAirports() {
         return airportService.getAllAirports();
     }
     @PostMapping
-    public Airport createAirport(@RequestBody AirportDto airportDto) {
+    public AirportDto createAirport(@RequestBody AirportDto airportDto) {
         return airportService.saveOneAirport(airportDto);
     }
 
     @PutMapping(value = "/{id}")
-    public Airport updateAirport(@PathVariable Long id, @RequestBody AirportDto airportDto) {
+    public AirportDto updateAirport(@PathVariable Long id, @RequestBody AirportDto airportDto) {
         return airportService.updateByAirport(id, airportDto);
     }
 
@@ -39,9 +39,8 @@ public class AirportControllers {
     }
 
     @GetMapping("/{airportId}")
-    public AirportDto getAirportResponse(@PathVariable Long airportId) {
-        Airport airport = airportService.getAirports(airportId);
-        return new AirportDto(airport);
+    public AirportDto getAirportDto(@PathVariable Long airportId) {
+        return airportService.getAirports(airportId);
     }
     // Belirli bir havaalanından kalkan uçuşları getirir
     @GetMapping("/{id}/departure-flights")
@@ -51,7 +50,7 @@ public class AirportControllers {
 
     // Belirli bir havaalanına iniş yapan uçuşları getirir
     @GetMapping("/{id}/arrival-flights")
-    public List<Flight> getArrivalFlights(@PathVariable Long id) {
+    public List<FlightDto> getArrivalFlights(@PathVariable Long id) {
         return airportService.getArrivalFlights(id);
     }
 }
