@@ -4,7 +4,6 @@ import com.example.FlightManagementSystem.Dto.CreateRouteDto;
 import com.example.FlightManagementSystem.Dto.RouteDto;
 import com.example.FlightManagementSystem.Dto.UpdateRouteDto;
 import com.example.FlightManagementSystem.entities.Airport;
-import com.example.FlightManagementSystem.entities.Flight;
 import com.example.FlightManagementSystem.entities.Route;
 import com.example.FlightManagementSystem.repos.AirportRepository;
 import com.example.FlightManagementSystem.repos.FlightRepository;

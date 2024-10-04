@@ -12,7 +12,6 @@ import com.example.FlightManagementSystem.repos.AirportRepository;
 import com.example.FlightManagementSystem.repos.FlightRepository;
 import com.example.FlightManagementSystem.repos.RouteRepository;
 import com.example.FlightManagementSystem.services.FlightService;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

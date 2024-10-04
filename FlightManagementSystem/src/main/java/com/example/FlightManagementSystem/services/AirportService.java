@@ -2,8 +2,6 @@ package com.example.FlightManagementSystem.services;
 
 import com.example.FlightManagementSystem.Dto.AirportDto;
 import com.example.FlightManagementSystem.Dto.FlightDto;
-import com.example.FlightManagementSystem.entities.Airport;
-import com.example.FlightManagementSystem.entities.Flight;
 
 import java.util.List;
 
