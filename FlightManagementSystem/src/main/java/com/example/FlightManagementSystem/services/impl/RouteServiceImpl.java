@@ -1,7 +1,10 @@
 package com.example.FlightManagementSystem.services.impl;
 
+import com.example.FlightManagementSystem.Dto.CreateRouteDto;
 import com.example.FlightManagementSystem.Dto.RouteDto;
+import com.example.FlightManagementSystem.Dto.UpdateRouteDto;
 import com.example.FlightManagementSystem.entities.Airport;
+import com.example.FlightManagementSystem.entities.Flight;
 import com.example.FlightManagementSystem.entities.Route;
 import com.example.FlightManagementSystem.repos.AirportRepository;
 import com.example.FlightManagementSystem.repos.FlightRepository;
@@ -44,35 +47,44 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public void deleteOneAirport(Long id) {
-        flightRepository.deleteByRouteId(id);
+    public void deleteOneRoute(Long id) {
+        flightRepository.clearRouteFromFlights(id);
         routeRepository.deleteById(id);
     }
 
     @Override
-    public RouteDto updateByRoute(Long id, RouteDto routeDto) {
+    public RouteDto updateByRoute(Long id, UpdateRouteDto updateRouteDto) {
         Optional<Route> oldRoute = routeRepository.findById(id);
         if (oldRoute.isPresent()) {
             Route route = oldRoute.get();
-            route.setDistanceInMiles(routeDto.getDistanceInMiles());
-            Airport destination = airportRepository.findById(routeDto.getDestination().getId()).orElse(null);
+            route.setDistanceInMiles(updateRouteDto.getDistanceInMiles()); // Set distance from UpdateRouteDto
+
+            // Find and set the source and destination airports using the IDs from UpdateRouteDto
+            Airport destination = airportRepository.findById(updateRouteDto.getDestinationAirportId()).orElse(null);
             route.setDestination(destination);
-            Airport source = airportRepository.findById(routeDto.getSource().getId()).orElse(null);
+
+            Airport source = airportRepository.findById(updateRouteDto.getSourceAirportId()).orElse(null);
             route.setSource(source);
+
+            // Save the updated route
             routeRepository.save(route);
+
+            // Return the updated Route as a RouteDto using modelMapper
             return modelMapper.map(route, RouteDto.class);
         } else {
-            return null;
+            return null; // Return null if the route doesn't exist
         }
     }
 
     @Override
-    public RouteDto createOneRoute(RouteDto routeDto) {
-        Route route = modelMapper.map(routeDto, Route.class);
-        Airport destination = airportRepository.findById(routeDto.getDestination().getId()).orElse(null);
+    public RouteDto createOneRoute(CreateRouteDto createRouteDto) {
+        Route route = new Route();
+        Airport destination = airportRepository.findById(createRouteDto.getDestinationAirportId()).orElse(null);
         route.setDestination(destination);
-        Airport source = airportRepository.findById(routeDto.getSource().getId()).orElse(null);
+        Airport source = airportRepository.findById(createRouteDto.getSourceAirportId()).orElse(null);
         route.setSource(source);
+        route.setDistanceInMiles(createRouteDto.getDistanceInMiles());
+
         return modelMapper.map(routeRepository.save(route), RouteDto.class);
     }
 }

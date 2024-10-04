@@ -2,8 +2,6 @@ package com.example.FlightManagementSystem.Dto;
 
 import com.example.FlightManagementSystem.entities.Airport;
 import com.example.FlightManagementSystem.entities.Route;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 

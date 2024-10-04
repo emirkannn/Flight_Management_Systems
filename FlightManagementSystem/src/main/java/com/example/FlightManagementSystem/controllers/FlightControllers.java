@@ -1,7 +1,9 @@
 package com.example.FlightManagementSystem.controllers;
 
+import com.example.FlightManagementSystem.Dto.CreateFlightDto;
 import com.example.FlightManagementSystem.Dto.FlightDto;
 import com.example.FlightManagementSystem.Dto.RouteDto;
+import com.example.FlightManagementSystem.Dto.UpdateFlightDto;
 import com.example.FlightManagementSystem.services.FlightService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,16 +32,15 @@ public class FlightControllers {
         return flightService.getFlightRoute(flightId);
     }
     @PostMapping
-    public FlightDto createFlight(@RequestBody FlightDto flightDto) {
-        return flightService.saveOneFlight(flightDto);
+    public FlightDto createFlight(@RequestBody CreateFlightDto createflightDto) {
+        return flightService.saveOneFlight(createflightDto);
     }
     @DeleteMapping("/{id}")
     public void deleteFlight(@PathVariable Long id) {
         flightService.deleteOneFlight(id);
     }
     @PutMapping("/{id}")
-    public FlightDto updateFlight(@PathVariable Long id, @RequestBody FlightDto flightDto) {
-        return flightService.updateByFlight(id,flightDto);
-
+    public FlightDto updateFlight(@PathVariable Long id, @RequestBody UpdateFlightDto updateFlightDto) {
+        return flightService.updateByFlight(id, updateFlightDto);
     }
 }

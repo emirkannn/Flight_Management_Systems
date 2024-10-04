@@ -1,7 +1,9 @@
 package com.example.FlightManagementSystem.services.impl;
 
+import com.example.FlightManagementSystem.Dto.CreateFlightDto;
 import com.example.FlightManagementSystem.Dto.FlightDto;
 import com.example.FlightManagementSystem.Dto.RouteDto;
+import com.example.FlightManagementSystem.Dto.UpdateFlightDto;
 import com.example.FlightManagementSystem.entities.Airport;
 import com.example.FlightManagementSystem.entities.Flight;
 import com.example.FlightManagementSystem.entities.FlightStatusEnum;
@@ -12,6 +14,7 @@ import com.example.FlightManagementSystem.repos.RouteRepository;
 import com.example.FlightManagementSystem.services.FlightService;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,16 +65,29 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightDto updateByFlight(Long id, FlightDto flightDto) {
+    public FlightDto updateByFlight(Long id, UpdateFlightDto updateFlightDto) {
         Optional<Flight> oldFlight = flightRepository.findById(id);
         if (oldFlight.isPresent()) {
             Flight flight = oldFlight.get();
-            modelMapper.map(flightDto, flight);
-            Route route = routeRepository.findById(flightDto.getRoute().getId()).orElse(null);
+
+            // Update the simple fields using the values from UpdateFlightDto
+            flight.setFlightNumber(updateFlightDto.getFlightNumber());
+            flight.setPrice(updateFlightDto.getPrice());
+            flight.setDepartureTime(updateFlightDto.getDepartureTime());
+            flight.setArrivalTime(updateFlightDto.getArrivalTime());
+            flight.setCapacity(updateFlightDto.getCapacity());
+            flight.setStatus(updateFlightDto.getStatus());
+
+            // Fetch and set the Route by ID
+            Route route = routeRepository.findById(updateFlightDto.getRouteId()).orElse(null);
             flight.setRoute(route);
-            Airport departureAirport = airportRepository.findById(flightDto.getDepartureAirport().getId()).orElse(null);
+
+            // Fetch and set the departure Airport by ID
+            Airport departureAirport = airportRepository.findById(updateFlightDto.getDepartureAirportId()).orElse(null);
             flight.setDepartureAirport(departureAirport);
-            Airport arrivalAirport = airportRepository.findById(flightDto.getArrivalAirport().getId()).orElse(null);
+
+            // Fetch and set the arrival Airport by ID
+            Airport arrivalAirport = airportRepository.findById(updateFlightDto.getArrivalAirportId()).orElse(null);
             flight.setArrivalAirport(arrivalAirport);
 
             // Save and return the updated FlightDto
@@ -82,29 +98,47 @@ public class FlightServiceImpl implements FlightService {
         }
     }
 
-    @Override
-    public FlightDto saveOneFlight(FlightDto flightDto) {
-        Flight flight = modelMapper.map(flightDto, Flight.class);
 
-        Airport departureAirport = airportRepository.findById(flightDto.getDepartureAirport().getId()).orElse(null);
-        flight.setDepartureAirport(departureAirport);
-        Airport arrivalAirport = airportRepository.findById(flightDto.getArrivalAirport().getId()).orElse(null);
-        flight.setArrivalAirport(arrivalAirport);
-        Route route = routeRepository.findById(flightDto.getRoute().getId()).orElse(null);
+    public FlightDto saveOneFlight(CreateFlightDto createFlightDto) {
+        Flight flight = new Flight();
+
+        // Set fields directly from CreateFlightDto
+        flight.setFlightNumber(createFlightDto.getFlightNumber());
+        flight.setPrice(createFlightDto.getPrice());
+        flight.setDepartureTime(createFlightDto.getDepartureTime());
+        flight.setArrivalTime(createFlightDto.getArrivalTime());
+        flight.setCapacity(createFlightDto.getCapacity());
+        flight.setStatus(createFlightDto.getStatus());
+
+        // Fetch and set the Route by ID
+        Route route = routeRepository.findById(createFlightDto.getRouteId()).orElse(null);
         flight.setRoute(route);
+
+        // Fetch and set the Departure Airport by ID
+        Airport departureAirport = airportRepository.findById(createFlightDto.getDepartureAirportId()).orElse(null);
+        flight.setDepartureAirport(departureAirport);
+
+        // Fetch and set the Arrival Airport by ID
+        Airport arrivalAirport = airportRepository.findById(createFlightDto.getArrivalAirportId()).orElse(null);
+        flight.setArrivalAirport(arrivalAirport);
+
+        // Set the initial status to "SCHEDULED"
         flight.setStatus(FlightStatusEnum.SCHEDULED);
 
+        // Save and return the FlightDto
         Flight savedFlight = flightRepository.save(flight);
         return modelMapper.map(savedFlight, FlightDto.class);
     }
 
+
     @Override
     public void deleteOneFlight(Long id) {
-        Optional<Flight> flight = flightRepository.findById(id);
-        if (flight.isPresent()) {
+        Optional<Flight> optionalFlight = flightRepository.findById(id);
+
+        if (optionalFlight.isPresent()) {
             flightRepository.deleteById(id);
         } else {
-            throw new EntityNotFoundException("Flight not found with id: " + id);
+            throw new ResourceNotFoundException("Flight not found with id " + id);
         }
     }
 }

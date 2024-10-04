@@ -14,12 +14,12 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "source_id", nullable = false)
     @JsonIgnoreProperties({"departureFlights", "arrivalFlights"})  // Döngüye girmemesi için ilişkili alanlar ignore edilir
     private Airport source; // kalkış havalimanı
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "destination_id", nullable = false)
     @JsonIgnoreProperties({"departureFlights", "arrivalFlights"})  // Döngüye girmemesi için ilişkili alanlar ignore edilir
     private Airport destination; // iniş havalimanı

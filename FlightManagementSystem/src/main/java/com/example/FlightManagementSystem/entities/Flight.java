@@ -18,34 +18,28 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
     private String flightNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "route_id")
     @JsonBackReference // sonsuz döngüyü önler
     private Route route;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "departure_airport_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "departure_airport_id")
     @JsonManagedReference("departure-airport")
     private Airport departureAirport;  // Kalkış havaalanı
 
-    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    @JoinColumn(name = "arrival_airport_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "arrival_airport_id", nullable = true)
     @JsonManagedReference("arrival-airport")
     private Airport arrivalAirport;     // Varış havaalanı
 
-    @Column(nullable = false)
     private int price;
-
-    @Column(nullable = false)
     private LocalDateTime departureTime; // kalkış saati
 
-    @Column(nullable = false)
     private LocalDateTime arrivalTime; // varış saati
 
-    @Column(nullable = false)
     private int capacity;
 
     @Enumerated(EnumType.STRING) // enum veritabanında string olarak saklanacak

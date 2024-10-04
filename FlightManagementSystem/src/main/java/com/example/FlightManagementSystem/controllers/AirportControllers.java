@@ -2,8 +2,6 @@ package com.example.FlightManagementSystem.controllers;
 
 import com.example.FlightManagementSystem.Dto.AirportDto;
 import com.example.FlightManagementSystem.Dto.FlightDto;
-import com.example.FlightManagementSystem.entities.Airport;
-import com.example.FlightManagementSystem.entities.Flight;
 import com.example.FlightManagementSystem.services.AirportService;
 import org.springframework.web.bind.annotation.*;
 
